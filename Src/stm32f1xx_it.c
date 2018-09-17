@@ -335,13 +335,12 @@ void TIM4_IRQHandler(void)
   sprintf((char *)buf, "%2d-%02d-%4d", sDate.Date, sDate.Month, 2000 + sDate.Year);
   OLED_write(0, 11, buf);
 
-
- 
+  
   element_t* tCursor = mCursor->prev->prev; //temp pos-2
   OLED_write(5, 0, (uint8_t*)">");
   
   for (int i = 0 ; i < 6 ; i++){
-    if(tCursor->eType & (PARAM | TIMER)) menuLoadActualValToElement(tCursor);
+    if(mCursor->eType == PARAM || mCursor->eType ==  TIMER) menuLoadActualValToElement(tCursor);
     
     if (tCursor->eType == PARAM)
         sprintf ((char *)buf, "%-15s%5d", tCursor->name, tCursor->curVal); //dec val
@@ -351,7 +350,7 @@ void TIM4_IRQHandler(void)
       if (tCursor->curVal / 60 == 24) sprintf ((char *)buf, "%-15s%5s", tCursor->name, "OFF"); //timer off
     }
     
-    if (tCursor->eType & (FOLDER | FUNC))
+    if (tCursor->eType == FOLDER && tCursor->eType == FUNC)
         sprintf ((char *)buf, "%-15s", tCursor->name);
     
     
@@ -377,11 +376,11 @@ void TIM4_IRQHandler(void)
   if (selected){
     if(myEnc.left) {
       menuSetNewValToElem(mCursor->curVal - 1);
-      if(mCursor->eType & (PARAM | TIMER)) menuMainFunc();
+      if(mCursor->eType == PARAM || mCursor->eType ==  TIMER) menuMainFunc();
     }
     if(myEnc.right) {
       menuSetNewValToElem(mCursor->curVal + 1);
-      if(mCursor->eType & (PARAM | TIMER)) menuMainFunc();
+      if(mCursor->eType == PARAM || mCursor->eType ==  TIMER) menuMainFunc();
     }
     if(myEnc.middle) {
       if(mCursor->eType == FUNC) menuMainFunc();
