@@ -295,8 +295,17 @@ void TIM4_IRQHandler(void)
   if(sTime.Hours == getSettings()->sunrise / 60 && sTime.Minutes == getSettings()->sunrise % 60) effectIndex = 1; //sunrise
   if(sTime.Hours == getSettings()->sunset  / 60 && sTime.Minutes == getSettings()->sunset  % 60) effectIndex = 2; //sunset
   
-  if(sTime.Hours == getSettings()->R0_1 / 60 && sTime.Minutes == getSettings()->R0_1 % 60) HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, GPIO_PIN_SET); //r0 ON
-  if(sTime.Hours == getSettings()->R0_0 / 60 && sTime.Minutes == getSettings()->R0_0 % 60) HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, GPIO_PIN_RESET); //r0 OFF
+  //main light
+  if(sTime.Hours == getSettings()->R0_1 / 60 && sTime.Minutes == getSettings()->R0_1 % 60) {
+    effectIndex = 0; //LED OFF
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, GPIO_PIN_SET); //r0 ON
+  }
+  if(sTime.Hours == getSettings()->R0_0 / 60 && sTime.Minutes == getSettings()->R0_0 % 60) {
+    effectIndex = 8; //manual work
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, GPIO_PIN_RESET); //r0 OFF
+  }
+  
+  //user 
   if(sTime.Hours == getSettings()->R1_1 / 60 && sTime.Minutes == getSettings()->R1_1 % 60) HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET); //r1 ON
   if(sTime.Hours == getSettings()->R1_0 / 60 && sTime.Minutes == getSettings()->R1_0 % 60) HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_RESET); //r1 OFF
   

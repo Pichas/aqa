@@ -14,6 +14,7 @@ void discoteka (uint32_t* delayTime); //....
 void cloud(uint32_t* delayTime); //облачно, возможно гроза
 void rgbSensor(uint32_t* delayTime); //sensor mode
 void rgbFreeze(uint32_t* delayTime);
+void spot(uint32_t* delayTime);
 void manual(uint32_t* delayTime);
 
 //other
@@ -66,9 +67,10 @@ ledsArray* init(uint16_t ledCount){
   addEffect(&discoteka);
   addEffect(&rgbSensor);
   addEffect(&rgbFreeze);
+  addEffect(&spot);
   addEffect(&manual);
   
-  menuGet()[11].maxVal = effAr.count;
+  menuGet()[12].maxVal = effAr.count - 1;
   
   return &ledCntrl;
 }
@@ -97,13 +99,13 @@ uint8_t getEffectCount(void){
 
 
 /*
-строка *(led.ptr + i) = mask & p ? 16 : 8;
+строка *(led.ptr + i) = mask & p ? UP : DOWN;
 эквивалент
 
 if (mask & p) //если бит в цвете установлен
-  led.ptr[i] = 16; //значит на выходе должна быть 1, а это число 16 в буфере
+  led.ptr[i] = UP; //значит на выходе должна быть 1, а это число 16 в буфере
 else
-  led.ptr[i] = 8; //иначе пишем 8 - это для ленты будет бит установленный в 0
+  led.ptr[i] = DOWN; //иначе пишем 8 - это для ленты будет бит установленный в 0
 
 */
 
@@ -279,6 +281,19 @@ void rgbFreeze(uint32_t* delayTime){
   
   *delayTime = 500; 
 }
+
+
+void spot(uint32_t* delayTime){
+  for (int i = 0 ; i <= ledCntrl.ledCount ; i++){
+    if (i == pSet->flashLedCount)
+      ledCntrl.setUserColor(i, pSet->redLimit, pSet->greenLimit, pSet->blueLimit); //spot lite
+    else
+      ledCntrl.setUserColor(i, 0, 0, 0); //
+  }
+  
+  *delayTime = 500; 
+}
+
 
 void manual(uint32_t* delayTime){
   for (int i = 0 ; i <= ledCntrl.ledCount ; i++){

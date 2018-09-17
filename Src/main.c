@@ -55,19 +55,12 @@
 /* USER CODE END Includes */
 
 
-
-
-
-
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
 
 volatile uint8_t effectIndex = 0; //индекс эффекта
-
-uint8_t transmitBuffer[32];
-uint8_t receiveBuffer[32];
 
 /* USER CODE END PV */
 
@@ -124,7 +117,6 @@ int main(void)
   setting* set = loadSettings();  //загрузка настроек из флэш памяти
   ledsArray* ledCntrl = init(set->ledCount); //инициализация ленты сохраненным колвом светодиодов (ограничим до 1000 шт) 
   
-
   HAL_Delay(100);
     
   OLED_init();
@@ -138,49 +130,21 @@ int main(void)
   HAL_TIM_Base_Start(&htim4);
   HAL_TIM_Base_Start_IT(&htim4);
 
-
-  
-
   /* USER CODE END 2 */
-  
   uint32_t delayTime = 0;
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  
-//  for (unsigned char i = 0; i < 32; i++)
-//  {
-//    transmitBuffer[i] = i + 1;
-//    receiveBuffer[i] = 0;
-//  }
-
-
-
-//  uint8_t send[] = "AT+VERSION?\r\n";
- 
-//  HAL_UART_Receive_IT(&huart1, receiveBuffer, 32);
-//  HAL_UART_Transmit_IT(&huart1, send, 5);
-////  
-///  HAL_UART_Transmit(&huart1, send, 13, 1000);
-////  HAL_UART_Receive(&huart1, receiveBuffer, 32, 1000);
-
-//  HAL_UART_Transmit(&huart1, send, 13, 1000);
-//  HAL_UART_Transmit(&huart1, send, 5, 1000);
 
   while (1)
   {
-    
   /* USER CODE END WHILE */
     getEffect(effectIndex)(&delayTime);
 
     HAL_Delay(delayTime);
-    
-
-    
   /* USER CODE BEGIN 3 */
 
   }
   /* USER CODE END 3 */
-
 }
 
 /**

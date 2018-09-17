@@ -6,11 +6,6 @@ void Internal_Flash_Erase(unsigned int pageAddress); //стереть СТРАНИЦУ!
 void Internal_Flash_Write(uint16_t* data, uint32_t address, uint16_t count); //записать 2 байта во флэш
 
 
-
-uint16_t checkLimit(uint16_t value, uint16_t limit){ //проверка диапазона
-  return value >= limit ? limit : value;
-}
-
 setting* loadSettings(void){ //загрузка параметров из памяти в оперативу
   set.save = &saveSettings; //установить указатель на сохранение
   uint8_t ci = 0; //индекс параметра в памяти
@@ -35,12 +30,12 @@ setting* loadSettings(void){ //загрузка параметров из памяти в оперативу
   set.blueLimit     = set.blueLimit     > 255  ? 255  : set.blueLimit; //ограничить цвет до 255 
   set.brightLimit   = set.brightLimit   > 255  ? 255  : set.brightLimit; //ограничить яркость до 255 
   set.flashLedCount = set.flashLedCount > 300  ? 300  : set.flashLedCount; //ограничить молнии до 300 
-  set.sunrise       = set.sunrise       > 1440 ? 1440 : set.sunrise; //ограничить молнии до 300 
-  set.sunset        = set.sunset        > 1440 ? 1440 : set.sunset; //ограничить молнии до 300 
-  set.R0_0          = set.R0_0          > 1440 ? 1440 : set.R0_0; //ограничить молнии до 300 
-  set.R0_1          = set.R0_1          > 1440 ? 1440 : set.R0_1; //ограничить молнии до 300 
-  set.R1_0          = set.R1_0          > 1440 ? 1440 : set.R1_0; //ограничить молнии до 300 
-  set.R1_1          = set.R1_1          > 1440 ? 1440 : set.R1_1; //ограничить молнии до 300 
+  set.sunrise       = set.sunrise       > 1440 ? 1440 : set.sunrise; // 24h timer off
+  set.sunset        = set.sunset        > 1440 ? 1440 : set.sunset; //24h timer off
+  set.R0_0          = set.R0_0          > 1440 ? 1440 : set.R0_0; //24h timer off
+  set.R0_1          = set.R0_1          > 1440 ? 1440 : set.R0_1; //24h timer off
+  set.R1_0          = set.R1_0          > 1440 ? 1440 : set.R1_0; //24h timer off
+  set.R1_1          = set.R1_1          > 1440 ? 1440 : set.R1_1; //24h timer off
 
   
   return &set;
@@ -52,15 +47,6 @@ setting* getSettings(void){
 
 
 void saveSettings(void){
-  //проврка диапазонов
-  set.redLimit    = checkLimit(set.redLimit, 255);
-  set.greenLimit  = checkLimit(set.greenLimit, 255);
-  set.blueLimit   = checkLimit(set.blueLimit, 255);
-  set.brightLimit = checkLimit(set.brightLimit, 255);
-  
-  set.flashLedCount = checkLimit(set.flashLedCount, set.ledCount);
-  
-  
   //массив для записи
   uint16_t arrToSave[] = {set.ledCount,
                           set.redLimit,

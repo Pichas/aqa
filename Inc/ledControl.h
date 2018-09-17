@@ -14,9 +14,9 @@
 
 
 //#def
-#define PREAMBLESIZE 300 //начальные нули для сброса ленты
-#define UP 20
-#define DOWN 10
+#define PREAMBLESIZE 200 //начальные нули для сброса ленты
+#define UP 16
+#define DOWN 8
    
 //typedefs
    typedef void (*pfn_effect)(uint32_t*); //указатель на функцию с эфектом
