@@ -17,6 +17,13 @@ typedef struct {
   uint16_t blueLimit;
   uint16_t brightLimit;
   uint16_t flashLedCount;
+  uint16_t sunrise;
+  uint16_t sunset;
+  uint16_t R0_0;
+  uint16_t R0_1;
+  uint16_t R1_0;
+  uint16_t R1_1;
+  
   
   void (*save)(void); //указатель на функцию сохранения данных в флэш
 }setting;

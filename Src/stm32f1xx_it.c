@@ -292,9 +292,13 @@ void TIM4_IRQHandler(void)
   /* Get the RTC current Date */
   HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);
   
-  if(sTime.Hours ==  6 && sTime.Minutes == 00) effectIndex = 1; //sunrise
-  if(sTime.Hours == 21 && sTime.Minutes == 00) effectIndex = 2; //sunrise
+  if(sTime.Hours == getSettings()->sunrise / 60 && sTime.Minutes == getSettings()->sunrise % 60) effectIndex = 1; //sunrise
+  if(sTime.Hours == getSettings()->sunset  / 60 && sTime.Minutes == getSettings()->sunset  % 60) effectIndex = 2; //sunset
   
+  if(sTime.Hours == getSettings()->R0_1 / 60 && sTime.Minutes == getSettings()->R0_1 % 60) HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, GPIO_PIN_SET); //r0 ON
+  if(sTime.Hours == getSettings()->R0_0 / 60 && sTime.Minutes == getSettings()->R0_0 % 60) HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, GPIO_PIN_RESET); //r0 OFF
+  if(sTime.Hours == getSettings()->R1_1 / 60 && sTime.Minutes == getSettings()->R1_1 % 60) HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET); //r1 ON
+  if(sTime.Hours == getSettings()->R1_0 / 60 && sTime.Minutes == getSettings()->R1_0 % 60) HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_RESET); //r1 OFF
   
   
   /* USER CODE END TIM4_IRQn 0 */
@@ -328,15 +332,26 @@ void TIM4_IRQHandler(void)
   OLED_write(5, 0, (uint8_t*)">");
   
   for (int i = 0 ; i < 6 ; i++){
-    if(tCursor->eType == PARAM) menuLoadActualValToElement(tCursor);
-      
-    sprintf ((char *)buf, "%-17s%3d", tCursor->name, tCursor->curVal);
-
+    if(tCursor->eType & (PARAM | TIMER)) menuLoadActualValToElement(tCursor);
+    
+    if (tCursor->eType == PARAM)
+        sprintf ((char *)buf, "%-15s%5d", tCursor->name, tCursor->curVal); //dec val
+    
+    if (tCursor->eType == TIMER){ //timers
+      if (tCursor->curVal / 60 < 24)  sprintf ((char *)buf, "%-15s%2d:%02d", tCursor->name, tCursor->curVal / 60, tCursor->curVal % 60); //time
+      if (tCursor->curVal / 60 == 24) sprintf ((char *)buf, "%-15s%5s", tCursor->name, "OFF"); //timer off
+    }
+    
+    if (tCursor->eType & (FOLDER | FUNC))
+        sprintf ((char *)buf, "%-15s", tCursor->name);
+    
+    
     OLED_write(i + 3, 1, buf);
     
-    if(tCursor->eType == FOLDER || tCursor->eType == FUNC)
-      OLED_write(i + 3, 20, (uint8_t*)" ");
-     
+    
+//    if(tCursor->eType & (FOLDER | FUNC))
+//      OLED_write(i + 3, 20, (uint8_t*)" ");
+//     
     tCursor = tCursor->next;
   }
     
@@ -353,11 +368,11 @@ void TIM4_IRQHandler(void)
   if (selected){
     if(myEnc.left) {
       menuSetNewValToElem(mCursor->curVal - 1);
-      if(mCursor->eType == PARAM) menuMainFunc();
+      if(mCursor->eType & (PARAM | TIMER)) menuMainFunc();
     }
     if(myEnc.right) {
       menuSetNewValToElem(mCursor->curVal + 1);
-      if(mCursor->eType == PARAM) menuMainFunc();
+      if(mCursor->eType & (PARAM | TIMER)) menuMainFunc();
     }
     if(myEnc.middle) {
       if(mCursor->eType == FUNC) menuMainFunc();

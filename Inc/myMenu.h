@@ -18,6 +18,7 @@
 typedef enum{
   FOLDER = 0,
   PARAM,
+  TIMER,
   FUNC
 } meType;
 
@@ -37,7 +38,16 @@ typedef enum {
   FLASHLEDCOUNT,
   CURRENTEFF,
   RGBTIME,
+  SUNRISE,
+  SUNSET,
+  R0_0,
+  R0_1,
+  R1_0,
+  R1_1,
   FLASHWRITE
+  
+  
+  
   
 } meCode;
 

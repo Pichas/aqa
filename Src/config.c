@@ -21,14 +21,26 @@ setting* loadSettings(void){ //загрузка параметров из памяти в оперативу
   set.blueLimit     = (*(__IO uint16_t*) (PAGEADDR + sizeof(uint16_t) * ci++)); //ограничение по синему
   set.brightLimit   = (*(__IO uint16_t*) (PAGEADDR + sizeof(uint16_t) * ci++)); //ограничение по яркости для облачности
   set.flashLedCount = (*(__IO uint16_t*) (PAGEADDR + sizeof(uint16_t) * ci++)); //количество светодиодов для эфекта молнии
+  set.sunrise       = (*(__IO uint16_t*) (PAGEADDR + sizeof(uint16_t) * ci++)); //количество светодиодов для эфекта молнии
+  set.sunset        = (*(__IO uint16_t*) (PAGEADDR + sizeof(uint16_t) * ci++)); //количество светодиодов для эфекта молнии
+  set.R0_0          = (*(__IO uint16_t*) (PAGEADDR + sizeof(uint16_t) * ci++)); //количество светодиодов для эфекта молнии
+  set.R0_1          = (*(__IO uint16_t*) (PAGEADDR + sizeof(uint16_t) * ci++)); //количество светодиодов для эфекта молнии
+  set.R1_0          = (*(__IO uint16_t*) (PAGEADDR + sizeof(uint16_t) * ci++)); //количество светодиодов для эфекта молнии
+  set.R1_1          = (*(__IO uint16_t*) (PAGEADDR + sizeof(uint16_t) * ci++)); //количество светодиодов для эфекта молнии
   
   
-  set.ledCount      = set.ledCount      > 300 ? 300 : set.ledCount; //ограничить до 300 штук
-  set.redLimit      = set.redLimit      > 255 ? 255 : set.redLimit; //ограничить цвет до 255 
-  set.greenLimit    = set.greenLimit    > 255 ? 255 : set.greenLimit; //ограничить цвет до 255 
-  set.blueLimit     = set.blueLimit     > 255 ? 255 : set.blueLimit; //ограничить цвет до 255 
-  set.brightLimit   = set.brightLimit   > 255 ? 255 : set.brightLimit; //ограничить яркость до 255 
-  set.flashLedCount = set.flashLedCount > 300 ? 300 : set.flashLedCount; //ограничить молнии до 300 
+  set.ledCount      = set.ledCount      > 300  ? 300  : set.ledCount; //ограничить до 300 штук
+  set.redLimit      = set.redLimit      > 255  ? 255  : set.redLimit; //ограничить цвет до 255 
+  set.greenLimit    = set.greenLimit    > 255  ? 255  : set.greenLimit; //ограничить цвет до 255 
+  set.blueLimit     = set.blueLimit     > 255  ? 255  : set.blueLimit; //ограничить цвет до 255 
+  set.brightLimit   = set.brightLimit   > 255  ? 255  : set.brightLimit; //ограничить яркость до 255 
+  set.flashLedCount = set.flashLedCount > 300  ? 300  : set.flashLedCount; //ограничить молнии до 300 
+  set.sunrise       = set.sunrise       > 1440 ? 1440 : set.sunrise; //ограничить молнии до 300 
+  set.sunset        = set.sunset        > 1440 ? 1440 : set.sunset; //ограничить молнии до 300 
+  set.R0_0          = set.R0_0          > 1440 ? 1440 : set.R0_0; //ограничить молнии до 300 
+  set.R0_1          = set.R0_1          > 1440 ? 1440 : set.R0_1; //ограничить молнии до 300 
+  set.R1_0          = set.R1_0          > 1440 ? 1440 : set.R1_0; //ограничить молнии до 300 
+  set.R1_1          = set.R1_1          > 1440 ? 1440 : set.R1_1; //ограничить молнии до 300 
 
   
   return &set;
@@ -55,7 +67,13 @@ void saveSettings(void){
                           set.greenLimit,
                           set.blueLimit,
                           set.brightLimit,
-                          set.flashLedCount};
+                          set.flashLedCount,
+                          set.sunrise,
+                          set.sunset,
+                          set.R0_0,
+                          set.R0_1,
+                          set.R1_0,
+                          set.R1_1};
   
   
   //unlock
