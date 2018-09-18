@@ -350,16 +350,11 @@ void TIM4_IRQHandler(void)
       if (tCursor->curVal / 60 == 24) sprintf ((char *)buf, "%-15s%5s", tCursor->name, "OFF"); //timer off
     }
     
-    if (tCursor->eType == FOLDER && tCursor->eType == FUNC)
+    if (tCursor->eType == FOLDER || tCursor->eType == FUNC)
         sprintf ((char *)buf, "%-15s", tCursor->name);
-    
     
     OLED_write(i + 3, 1, buf);
     
-    
-//    if(tCursor->eType & (FOLDER | FUNC))
-//      OLED_write(i + 3, 20, (uint8_t*)" ");
-//     
     tCursor = tCursor->next;
   }
     
