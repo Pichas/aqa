@@ -222,7 +222,7 @@ void sunset(uint32_t* delayTime){
 void snake(uint32_t* delayTime){
   uint8_t red = rand()%pSet->redLimit, green = rand()%pSet->greenLimit, blue = rand()%pSet->blueLimit; //получить цвета в диапазоне 0-ограничение
   
-  for (int i = 1 ; i <= ledCntrl.ledCount ; i++){ //сдвинуть цвета светодиодов на один вперед
+  for (int i = ledCntrl.ledCount ; i > 0 ; i--){ //сдвинуть цвета светодиодов на один вперед
     ledCntrl.setUserColor(i, ledCntrl.getLedX(i-1).red, ledCntrl.getLedX(i-1).green, ledCntrl.getLedX(i-1).blue);
   }
   ledCntrl.setUserColor(0, red, green, blue);//в нулевой внести новый цвет
